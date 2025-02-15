@@ -113,7 +113,13 @@ function toJSX(node, parentNode = {}, options = {}) {
       {...props}
       // Let's see if this ever gets triggered
       components={components}>
-${jsxNodes.map(childNode => toJSX(childNode, node)).join('')}
+${(() => {
+  const nodes = jsxNodes.map(childNode => toJSX(childNode, node));
+
+  console.log("First node in jsxNodes", nodes[0]);
+
+  return nodes.join('');
+})()}
     </MDXLayout>
   )
 };
