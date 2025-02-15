@@ -124,12 +124,6 @@ ${(() => {
     mustCheckContent = true;
   }
 
-  nodes.forEach((node, index) => {
-    if (node.contains("<meta name=")) {
-      console.log(nodes[index]);
-    }
-  });
-
   return nodes.join('');
 })()}
     </MDXLayout>
