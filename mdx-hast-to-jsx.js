@@ -116,7 +116,10 @@ function toJSX(node, parentNode = {}, options = {}) {
 ${(() => {
   const nodes = jsxNodes.map(childNode => toJSX(childNode, node));
 
-  console.log("First node in jsxNodes", nodes[0]);
+  if(nodes[0] == "<!doctype html>") {
+    nodes[0] = "<></>";
+    console.log("Attempted to fix doctype html issue, must be successful");
+  }
 
   return nodes.join('');
 })()}
