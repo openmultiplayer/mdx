@@ -114,16 +114,21 @@ function toJSX(node, parentNode = {}, options = {}) {
     <MDXLayout
       {...layoutProps}
       {...props}
-      // Let's see if this ever gets triggered
       components={components}>
 ${(() => {
   const nodes = jsxNodes.map(childNode => toJSX(childNode, node));
 
   if(nodes[0] == "<!doctype html>") {
-    nodes[0] = " ";
+    nodes[0] = "";
     console.log("Attempted to fix doctype html issue, must be successful");
     mustCheckContent = true;
   }
+
+  nodes.forEach((node, index) => {
+    if (node.contains("<meta name=")) {
+      console.log(nodes[index]);
+    }
+  });
 
   return nodes.join('');
 })()}
@@ -133,7 +138,6 @@ ${(() => {
 MDXContent.isMDXComponent = true`
 
     if (mustCheckContent) {
-      console.log(file ? file : "Unknown file");
       console.log(fn);
       mustCheckContent = false;
     }
