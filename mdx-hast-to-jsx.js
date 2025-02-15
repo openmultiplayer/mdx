@@ -30,7 +30,8 @@ function toJSX(node, parentNode = {}, options = {}) {
     // Default options
     skipExport = false,
     preserveNewlines = false,
-    wrapExport
+    wrapExport,
+    file
   } = options
   let children = ''
 
@@ -106,6 +107,8 @@ function toJSX(node, parentNode = {}, options = {}) {
 };`
     const mdxLayout = `const MDXLayout = ${layout ? layout : '"wrapper"'}`
 
+    let mustCheckContent = false;
+
     const fn = `function MDXContent({ components, ...props }) {
   return (
     <MDXLayout
@@ -117,8 +120,9 @@ ${(() => {
   const nodes = jsxNodes.map(childNode => toJSX(childNode, node));
 
   if(nodes[0] == "<!doctype html>") {
-    nodes[0] = "<></>";
+    nodes[0] = " ";
     console.log("Attempted to fix doctype html issue, must be successful");
+    mustCheckContent = true;
   }
 
   return nodes.join('');
@@ -127,6 +131,12 @@ ${(() => {
   )
 };
 MDXContent.isMDXComponent = true`
+
+    if (mustCheckContent) {
+      console.log(file ? file : "Unknown file");
+      console.log(fn);
+      mustCheckContent = false;
+    }
 
     // Check JSX nodes against imports
     const babelPluginExtractImportNamesInstance = new BabelPluginExtractImportNames()
